@@ -38,5 +38,13 @@ func main() {
 	}
 
 	fmt.Println(project.Info.Name)
+
+	// Get a project
+	release, _, err := pypi.Project.GetRelease("sampleproject", "1.3.0")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(release.Info.Name)
 }
 ```
