@@ -178,25 +178,18 @@ func (e *ErrorResponse) Error() string {
 	return fmt.Sprintf("%s %s: %d %s", e.Response.Request.Method, u, e.Response.StatusCode, e.Message)
 }
 
-// CheckResponse checks the API response for errors, and returns them if present.
+// CheckResponse checks the API response for errors, and returns them if
+// present. The PyPi API will return HTTP 200 OK if the request has no errors.
 func CheckResponse(r *http.Response) error {
-	switch r.StatusCode {
-	case 200, 304:
+	if r.StatusCode == 200 {
 		return nil
 	}
 
 	errorResponse := &ErrorResponse{Response: r}
+	errorResponse.Message = "unknown error"
 	data, err := ioutil.ReadAll(r.Body)
 	if err == nil && data != nil {
 		errorResponse.Body = data
-
-		var raw interface{}
-		if err := json.Unmarshal(data, &raw); err != nil {
-			errorResponse.Message = "failed to parse unknown error format"
-		} else {
-			// errorResponse.Message = parseError(raw)
-			return nil
-		}
 	}
 
 	return errorResponse
