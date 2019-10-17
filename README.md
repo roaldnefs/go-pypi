@@ -1,6 +1,6 @@
 # go-pypi
 
-A PyPi API client enabling Go project to iteract with PyPi.
+A PyPi API client enabling Go project to interact with PyPi.
 
 ## Usage
 
